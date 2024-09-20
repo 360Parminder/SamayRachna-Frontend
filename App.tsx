@@ -1,118 +1,214 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import TimetableScreen from './src/Screens/TimeTable';
+import Login from './src/Screens/Login';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+export default function App() {
+  const data = {
+    "success": true,
+    "message": "Timetable generated successfully",
+    "timetable": [
+        [
+            {
+                "day": 1,
+                "lecture": 1,
+                "teacher": "Mr. Sharma",
+                "subject": "Mathematics"
+            },
+            {
+                "day": 1,
+                "lecture": 2,
+                "teacher": "Mr. Gupta",
+                "subject": "English"
+            },
+            {
+                "day": 1,
+                "lecture": 3,
+                "teacher": "Ms. Singh",
+                "subject": "Biology"
+            },
+            {
+                "day": 1,
+                "lecture": 4,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            },
+            {
+                "day": 1,
+                "lecture": 5,
+                "teacher": "Ms. yadav",
+                "subject": "Computer"
+            },
+            {
+                "day": 1,
+                "lecture": 6,
+                "teacher": "Ms. Singh",
+                "subject": "Chemistry"
+            }
+        ],
+        [
+            {
+                "day": 2,
+                "lecture": 1,
+                "teacher": "Ms. Singh",
+                "subject": "Biology"
+            },
+            {
+                "day": 2,
+                "lecture": 2,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            },
+            {
+                "day": 2,
+                "lecture": 3,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            },
+            {
+                "day": 2,
+                "lecture": 4,
+                "teacher": "Ms. yadav",
+                "subject": "Computer"
+            },
+            {
+                "day": 2,
+                "lecture": 5,
+                "teacher": "Mr. Sharma",
+                "subject": "Physics"
+            },
+            {
+                "day": 2,
+                "lecture": 6,
+                "teacher": "Mr. Khan",
+                "subject": "Political Science"
+            }
+        ],
+        [
+            {
+                "day": 3,
+                "lecture": 1,
+                "teacher": "Ms. Roy",
+                "subject": "Business Studies"
+            },
+            {
+                "day": 3,
+                "lecture": 2,
+                "teacher": "Ms. yadav",
+                "subject": "Computer"
+            },
+            {
+                "day": 3,
+                "lecture": 3,
+                "teacher": "Ms. Patel",
+                "subject": "Physics"
+            },
+            {
+                "day": 3,
+                "lecture": 4,
+                "teacher": "Ms. yadav",
+                "subject": "Computer"
+            },
+            {
+                "day": 3,
+                "lecture": 5,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            },
+            {
+                "day": 3,
+                "lecture": 6,
+                "teacher": "Ms. Patel",
+                "subject": "Chemistry"
+            }
+        ],
+        [
+            {
+                "day": 4,
+                "lecture": 1,
+                "teacher": "Mr. Sharma",
+                "subject": "Physics"
+            },
+            {
+                "day": 4,
+                "lecture": 2,
+                "teacher": "Mr. Khan",
+                "subject": "Political Science"
+            },
+            {
+                "day": 4,
+                "lecture": 3,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            },
+            {
+                "day": 4,
+                "lecture": 4,
+                "teacher": "Ms. Verma",
+                "subject": "History"
+            },
+            {
+                "day": 4,
+                "lecture": 5,
+                "teacher": "Ms. Patel",
+                "subject": "Physics"
+            },
+            {
+                "day": 4,
+                "lecture": 6,
+                "teacher": "Ms. pandat",
+                "subject": "C++"
+            }
+        ],
+        [
+            {
+                "day": 5,
+                "lecture": 1,
+                "teacher": "Ms. Singh",
+                "subject": "Chemistry"
+            },
+            {
+                "day": 5,
+                "lecture": 2,
+                "teacher": "Mr. Khan",
+                "subject": "Political Science"
+            },
+            {
+                "day": 5,
+                "lecture": 3,
+                "teacher": "Ms. Patel",
+                "subject": "Physics"
+            },
+            {
+                "day": 5,
+                "lecture": 4,
+                "teacher": "Mr. Gupta",
+                "subject": "English"
+            },
+            {
+                "day": 5,
+                "lecture": 5,
+                "teacher": "Ms. Verma",
+                "subject": "Geography"
+            },
+            {
+                "day": 5,
+                "lecture": 6,
+                "teacher": "Mr. Gupta",
+                "subject": "English"
+            }
+        ]
+    ]
 }
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+  
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+     
+    <Login/>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  
+}); 
 
-export default App;
