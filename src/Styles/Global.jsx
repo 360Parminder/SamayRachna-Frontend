@@ -6,7 +6,7 @@ const GlobalStyles = StyleSheet.create({
         flex: 1,
         backgroundColor: GlobalColors.background,
         paddingHorizontal: 20,
-        justifyContent: "center",
+        // justifyContent: 'center',
         alignItems:'center'
     },
     label: {

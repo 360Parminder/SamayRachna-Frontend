@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import TimetableScreen from './src/Screens/TimeTable';
 import Login from './src/Screens/Login';
+import HomeScreen from './src/Screens/HomeScreen';
 
 export default function App() {
   const data = {
@@ -204,7 +205,8 @@ export default function App() {
   
   return (
      
-    <Login/>
+    // <Login/>
+    <HomeScreen/>
   );
 }
 
