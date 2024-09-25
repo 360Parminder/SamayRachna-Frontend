@@ -1,5 +1,6 @@
 import { Image, Pressable, Text, View } from "react-native"
-import GlobalStyles from "../Styles/Global"
+import GlobalStyles from "../Styles/GlobalStyles"
+import GlobalColors from "../Styles/GlobalColors"
 
 const HomeScreen = () => {
     return (
@@ -11,12 +12,15 @@ const HomeScreen = () => {
                <Text style={{fontSize:18, fontWeight:'600',color:'white'}}>Parminder Singh</Text>
                </View>
             </View>
-            <View style={{width:'100%',flexDirection:'column',justifyContent:'space-between',marginTop:20}}>
-                <Pressable>
+            <View style={{width:'100%',flexDirection:'column',justifyContent:'space-between',gap:10,marginTop:20}}>
+                <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
                     <Text style={{color:'white',fontSize:18, fontWeight:'600'}}>View Time Table</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
                     <Text style={{color:'white',fontSize:18, fontWeight:'600'}}>Create Time Table</Text>
+                </Pressable>
+                <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
+                    <Text style={{color:'white',fontSize:18, fontWeight:'600'}}>Created Time Tables</Text>
                 </Pressable>
             </View>
         </View>

@@ -1,5 +1,5 @@
 import { Image, Pressable, Text, TextInput, View } from "react-native"
-import GlobalStyles from "../Styles/Global"
+import GlobalStyles from "../Styles/GlobalStyles"
 import GlobalColors from "../Styles/GlobalColors"
 
 
