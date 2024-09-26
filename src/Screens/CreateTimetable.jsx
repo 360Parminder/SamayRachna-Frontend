@@ -9,6 +9,10 @@ const CreateTimetable = () => {
 
     // State to manage teacher details, including subjects
     const [teachers, setTeachers] = useState([]);
+    const [workingDays, setWorkingDays] = useState(0);
+    const [lecturesPerDay, setLecturesPerDay] = useState(0);
+    const [maxLecturesPerDayPerTeacher, setMaxLecturesPerDayPerTeacher] = useState(0);
+    const [maxLecturesPerWeekPerTeacher, setMaxLecturesPerWeekPerTeacher] = useState(0);
 
     // Handle the change in number of teachers
     const handleNumTeachersChange = (text) => {
@@ -17,8 +21,8 @@ const CreateTimetable = () => {
             setNumTeachers(value);
 
             // Update the teachers array based on the new number of teachers
-            const updatedTeachers = Array.from({ length: value }, (_, index) => ({
-                name: "",
+            const updatedTeachers = Array.from({ length: value }, () => ({
+                teacherName: "",
                 numSubjects: 0,
                 subjects: [],
             }));
@@ -53,7 +57,7 @@ const CreateTimetable = () => {
         setTeachers(updatedTeachers);
     };
 
-    console.log(teachers);
+    console.log(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher);
 
     return (
         <View style={GlobalStyles.container}>
@@ -63,11 +67,21 @@ const CreateTimetable = () => {
             <ScrollView style={{ width: '100%' }}>
                 <View>
                     <Text style={GlobalStyles.label}>Working Days</Text>
-                    <TextInput style={GlobalStyles.inputText} keyboardType="numeric" placeholder="Enter number of working days" />
+                    <TextInput 
+                        onChangeText={(text) => setWorkingDays(parseInt(text, 10) || 0)} 
+                        style={GlobalStyles.inputText} 
+                        keyboardType="numeric" 
+                        placeholder="Enter number of working days" 
+                    />
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Number of Lectures</Text>
-                    <TextInput style={GlobalStyles.inputText} keyboardType="numeric" placeholder="Enter number of lectures" />
+                    <TextInput 
+                        onChangeText={(text) => setLecturesPerDay(parseInt(text, 10) || 0)} 
+                        style={GlobalStyles.inputText} 
+                        keyboardType="numeric" 
+                        placeholder="Enter number of lectures" 
+                    />
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Number of Teachers</Text>
@@ -80,50 +94,59 @@ const CreateTimetable = () => {
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Teacher Daily Working Load</Text>
-                    <TextInput style={GlobalStyles.inputText} keyboardType="numeric" placeholder="Enter teacher daily working load" />
+                    <TextInput 
+                        onChangeText={(text) => setMaxLecturesPerDayPerTeacher(parseInt(text, 10) || 0)} 
+                        style={GlobalStyles.inputText} 
+                        keyboardType="numeric" 
+                        placeholder="Enter teacher daily working load" 
+                    />
                 </View>
-              {<>
 
-                <View style={{ alignItems: 'center', backgroundColor: '#71717a', marginVertical: 10, padding: 10, borderRadius: 8 }}>
-                    <Text style={{ fontSize: 22, fontWeight: '700' }}>Teachers Details</Text>
-                </View>
+                {teachers.length > 0 && (
+                    <>
+                        <View style={{ alignItems: 'center', backgroundColor: '#71717a', marginVertical: 10, padding: 10, borderRadius: 8 }}>
+                            <Text style={{ fontSize: 22, fontWeight: '700' }}>Teachers Details</Text>
+                        </View>
 
-                {teachers.map((teacher, teacherIndex) => (
-                    <View key={teacherIndex} style={{ backgroundColor: '#27272a', borderRadius: 10, padding: 10, marginBottom: 10 }}>
-                        <Text style={{ marginBottom: 10, fontSize: 22, fontWeight: '600' }}>Teacher {teacherIndex + 1}</Text>
-                        <Text style={GlobalStyles.label}>Name</Text>
-                        <TextInput
-                            style={GlobalStyles.inputText}
-                            placeholder="Enter Name"
-                            value={teacher.name}
-                            onChangeText={(text) => handleTeacherDetailChange(teacherIndex, "name", text)}
-                        />
-                        <Text style={GlobalStyles.label}>Number of Subjects</Text>
-                        <TextInput
-                            style={GlobalStyles.inputText}
-                            keyboardType="numeric"
-                            placeholder="Enter Number of Subjects"
-                            onChangeText={(text) => handleNumSubjectsChange(teacherIndex, text)}
-                        />
-
-                        {/* Display subject inputs based on the number of subjects entered */}
-                        {teacher.subjects.map((subject, subjectIndex) => (
-                            <View key={subjectIndex}>
-                                <Text style={GlobalStyles.label}>Subject Name {subjectIndex + 1}</Text>
+                        {teachers.map((teacher, teacherIndex) => (
+                            <View key={teacherIndex} style={{ backgroundColor: '#27272a', borderRadius: 10, padding: 10, marginBottom: 10 }}>
+                                <Text style={{ marginBottom: 10, fontSize: 22, fontWeight: '600' }}>Teacher {teacherIndex + 1}</Text>
+                                <Text style={GlobalStyles.label}>Name</Text>
                                 <TextInput
                                     style={GlobalStyles.inputText}
-                                    placeholder={`Enter Subject Name ${subjectIndex + 1}`}
-                                    onChangeText={(text) => handleSubjectNameChange(teacherIndex, subjectIndex, text)}
+                                    placeholder="Enter Name"
+                                    value={teacher.teacherName}
+                                    onChangeText={(text) => handleTeacherDetailChange(teacherIndex, "teacherName", text)}
                                 />
+                                <Text style={GlobalStyles.label}>Number of Subjects</Text>
+                                <TextInput
+                                    style={GlobalStyles.inputText}
+                                    keyboardType="numeric"
+                                    placeholder="Enter Number of Subjects"
+                                    value={teacher.numSubjects.toString()}
+                                    onChangeText={(text) => handleNumSubjectsChange(teacherIndex, text)}
+                                />
+
+                                {/* Display subject inputs based on the number of subjects entered */}
+                                {teacher.subjects.map((subject, subjectIndex) => (
+                                    <View key={subjectIndex}>
+                                        <Text style={GlobalStyles.label}>Subject Name {subjectIndex + 1}</Text>
+                                        <TextInput
+                                            style={GlobalStyles.inputText}
+                                            placeholder={`Enter Subject Name ${subjectIndex + 1}`}
+                                            value={subject}
+                                            onChangeText={(text) => handleSubjectNameChange(teacherIndex, subjectIndex, text)}
+                                        />
+                                    </View>
+                                ))}
                             </View>
                         ))}
-                    </View>
-                ))}
-                </> 
-                }
+                    </>
+                )}
+
                 <View>
                     <Pressable style={{ backgroundColor: GlobalColors.primary, padding: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 20, fontWeight: '600',color:'white' }}>Generate Timetable</Text>
+                        <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>Generate Timetable</Text>
                     </Pressable>
                 </View>
             </ScrollView>
