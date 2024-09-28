@@ -1,8 +1,10 @@
 import { Image, Pressable, Text, View } from "react-native"
 import GlobalStyles from "../Styles/GlobalStyles"
 import GlobalColors from "../Styles/GlobalColors"
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
     return (
         <View style={GlobalStyles.container}>
             <View style={{width:'100%',flexDirection:'row',alignItems:'center'}}>
@@ -16,7 +18,7 @@ const HomeScreen = () => {
                 <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
                     <Text style={{color:'white',fontSize:18, fontWeight:'600'}}>View Time Table</Text>
                 </Pressable>
-                <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
+                <Pressable onPress={()=>navigation.navigate('CreateTimetable')} style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>
                     <Text style={{color:'white',fontSize:18, fontWeight:'600'}}>Create Time Table</Text>
                 </Pressable>
                 <Pressable style={{backgroundColor:GlobalColors.tertiary,padding:10,borderRadius:5,justifyContent:'center',alignItems:'center',height:120}}>

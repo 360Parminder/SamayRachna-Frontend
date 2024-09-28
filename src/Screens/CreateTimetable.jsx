@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import GlobalStyles from "../Styles/GlobalStyles";
 import GlobalColors from "../Styles/GlobalColors";
+import timeTable from "../Api/timeTable";
+import { useNavigation } from "@react-navigation/native";
 
 const CreateTimetable = () => {
+    const navigation = useNavigation();
     // State to manage the number of teachers
     const [numTeachers, setNumTeachers] = useState(0);
-
     // State to manage teacher details, including subjects
     const [teachers, setTeachers] = useState([]);
     const [workingDays, setWorkingDays] = useState(0);
@@ -58,7 +60,12 @@ const CreateTimetable = () => {
     };
 
     console.log(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher);
-
+        const CreateTimetable = async()=>{
+            const TimeTable = await timeTable.createTimetable(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher,numTeachers);
+            console.log(TimeTable);
+            navigation.navigate('TimeTable');
+        }
+           
     return (
         <View style={GlobalStyles.container}>
             <View>
@@ -90,6 +97,15 @@ const CreateTimetable = () => {
                         keyboardType="numeric"
                         onChangeText={handleNumTeachersChange}
                         placeholder="Enter number of teachers"
+                    />
+                </View>
+                <View>
+                    <Text style={GlobalStyles.label}>Teacher Weekly Working Load</Text>
+                    <TextInput 
+                        onChangeText={(text) => setMaxLecturesPerWeekPerTeacher(parseInt(text, 10) || 0)} 
+                        style={GlobalStyles.inputText} 
+                        keyboardType="numeric" 
+                        placeholder="Enter teacher weekly working load"
                     />
                 </View>
                 <View>
@@ -145,7 +161,7 @@ const CreateTimetable = () => {
                 )}
 
                 <View>
-                    <Pressable style={{ backgroundColor: GlobalColors.primary, padding: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
+                    <Pressable onPress={()=>CreateTimetable()} style={{ backgroundColor: GlobalColors.primary, padding: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>Generate Timetable</Text>
                     </Pressable>
                 </View>

@@ -4,6 +4,7 @@ import GlobalColors from "./GlobalColors";
 const GlobalStyles = StyleSheet.create({
     container: {
         paddingTop: Platform.OS === "ios" ? 70 : 10,
+        paddingBottom: Platform.OS === "ios" ? 70 : 10,
         flex: 1,
         backgroundColor: GlobalColors.background,
         paddingHorizontal: 20,
