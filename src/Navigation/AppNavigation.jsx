@@ -9,7 +9,7 @@ const AppNavigation = () => {
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
             <Stack.Screen name="CreateTimetable" component={CreateTimetable}/>
-            <Stack.Screen name="TimeTable" component={TimetableScreen} options={{ headerShown: false }}/>
+            <Stack.Screen name="TimeTable" component={TimetableScreen} />
         </Stack.Navigator>
     );
 };  

@@ -63,7 +63,7 @@ const CreateTimetable = () => {
         const CreateTimetable = async()=>{
             const TimeTable = await timeTable.createTimetable(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher,numTeachers);
             console.log(TimeTable);
-            navigation.navigate('TimeTable');
+            navigation.navigate('TimeTable',{data:TimeTable});
         }
            
     return (
