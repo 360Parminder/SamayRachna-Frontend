@@ -24,6 +24,7 @@ const GlobalStyles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         color: GlobalColors.text,
+        placeholderTextColor: GlobalColors.textSecondary,
         fontSize: 16,
     }
 });

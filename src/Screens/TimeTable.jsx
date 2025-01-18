@@ -1,12 +1,26 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 
+const LectureCard = ({ lecture }) => (
+  <View style={styles.lectureCard}>
+    <Text style={styles.lectureText}>
+      Lecture {lecture.lecture}: {lecture.subject}
+    </Text>
+    <Text style={styles.teacherText}>Teacher: {lecture.teacher}</Text>
+  </View>
+);
+
 const TimetableScreen = ({ route }) => {
-    const data = route.params.data;
-    console.log(data);
-    
+  const data = route.params?.data.timetable;
+  console.log("table from table",data);
+  
+
+  if (!data || !data.timetable || !Array.isArray(data.timetable)) {
+    return <Text style={styles.errorText}>No timetable data available.</Text>;
+  }
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
- 
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Timetable</Text>
@@ -14,12 +28,7 @@ const TimetableScreen = ({ route }) => {
         <View key={dayIndex} style={styles.dayContainer}>
           <Text style={styles.dayTitle}>{daysOfWeek[dayIndex]}</Text>
           {daySchedule.map((lecture, lectureIndex) => (
-            <View key={lectureIndex} style={styles.lectureCard}>
-              <Text style={styles.lectureText}>
-                Lecture {lecture.lecture}: {lecture.subject}
-              </Text>
-              <Text style={styles.teacherText}>Teacher: {lecture.teacher}</Text>
-            </View>
+            <LectureCard key={`${dayIndex}-${lectureIndex}`} lecture={lecture} />
           ))}
         </View>
       ))}
@@ -63,6 +72,12 @@ const styles = StyleSheet.create({
   teacherText: {
     fontSize: 14,
     color: '#f3f0ff',
+  },
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

@@ -1,79 +1,91 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+**About the Project**
 
-# Getting Started
+This project is a comprehensive Time Table Management System designed to streamline the creation, publication, and distribution of timetables for educational institutions. The system is equipped with dynamic features that cater to diverse requirements and ensure efficient management of teacher workloads and schedules.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+### Key Features
 
-## Step 1: Start the Metro Server
+1. **Dynamic Timetable Creation:**
+   - Generate timetables that accommodate varying numbers of working days and teacher workloads.
+   - Support for dynamic allocation of lectures per day based on institutional needs.
+   - Enable assignment of a single teacher to multiple subjects, optimizing resource utilization.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+2. **Teacher-Centric Functionality:**
+   - Automatically include specific teachers in the timetable based on their subjects and availability.
+   - Publish and share the finalized timetable with individual teachers.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+3. **Automated Notifications:**
+   - Send download links for personalized timetables via email and SMS to teachers.
+   - Ensure timely delivery of timetables to all concerned personnel.
 
-```bash
-# using npm
-npm start
+4. **Customizable Parameters:**
+   - Allow administrators to configure the number of working days per week.
+   - Adjust teacher workloads based on predefined limits for lectures per day and week.
 
-# OR using Yarn
-yarn start
-```
+5. **User-Friendly Interface:**
+   - Intuitive dashboard for administrators to manage teachers, subjects, and schedules.
+   - Easy access for teachers to view and download their timetables.
 
-## Step 2: Start your Application
+### Benefits
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- **Efficiency:** Reduces the manual effort involved in timetable creation and dissemination.
+- **Accuracy:** Ensures error-free scheduling by considering dynamic constraints and requirements.
+- **Convenience:** Provides teachers with quick access to their schedules, enhancing communication and preparedness.
+- **Scalability:** Adaptable to institutions of various sizes and complexities.
 
-### For Android
+### Technology Stack
 
-```bash
-# using npm
-npm run android
+- **Frontend:** React Native
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL, Prisma ORM
+- **Notifications:** Integration with email and SMS APIs
 
-# OR using Yarn
-yarn android
-```
+### Contribution
 
-### For iOS
+We welcome contributions from the community to enhance and expand the features of this project. Here’s how you can contribute:
 
-```bash
-# using npm
-npm run ios
+1. **Report Issues:**
+   - If you encounter bugs or have suggestions for improvement, create an issue on the project’s GitHub repository.
 
-# OR using Yarn
-yarn ios
-```
+2. **Submit Pull Requests:**
+   - Fork the repository, make changes, and submit a pull request for review.
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+3. **Documentation:**
+   - Help improve the documentation by adding more detailed instructions or clarifying existing content.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+4. **Feature Development:**
+   - Propose and implement new features that align with the project’s goals.
 
-## Step 3: Modifying your App
+5. **Testing:**
+   - Contribute by testing the application and reporting any anomalies or inconsistencies.
 
-Now that you have successfully run the app, let's modify it.
+### How to Clone the Repository
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Follow these steps to clone the repository and set up the project locally:
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/360Parminder/SamayRachna-Frontend.git
+   ```
+2. **Navigate to the Project Directory:**
+   ```bash
+   cd SamayRachna-Frontend
+   ```
+3. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+4. **Set Up Environment Variables:**
+   - Create a `.env` file in the root directory.
+   - Add the necessary environment variables as specified in the documentation.
 
-## Congratulations! :tada:
+5. **Run the Development Server:**
+   ```bash
+   npm start
+   ```
+6. **Access the Application:**
+   - Use Android/IOS Device or Android/IOS Emulator 
 
-You've successfully run and modified your React Native App. :partying_face:
+For any questions or assistance, please feel free to contact us at **360.parminder@gmail.com**.
 
-### Now what?
+This project aims to revolutionize how educational institutions manage their scheduling, ensuring a seamless experience for both administrators and teachers.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.

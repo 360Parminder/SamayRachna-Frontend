@@ -1,27 +1,89 @@
-import axios from "axios";
+import axiosInstance from "../Utils/axiosConfig";
 
 const timeTable = {
-    createTimetable: async( teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher,numTeachers) => {
+    createTimetable: async (workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher, teachers, timetableName, numTeachers) => {
+        //    console.log("workingDays",workingDays);
+
         try {
-            const response = await axios.post('http://localhost:9876/timetable',
+            const response = await axiosInstance.post('/timetable',
                 {
                     workingDays: workingDays,
                     lecturesPerDay: lecturesPerDay,
                     totalTeachers: numTeachers,
                     maxLecturesPerDayPerTeacher: maxLecturesPerDayPerTeacher,
                     maxLecturesPerWeekPerTeacher: maxLecturesPerWeekPerTeacher,
-                    teachers: teachers
+                    teachers: teachers,
+                    timetableName: timetableName,
+
                 }
-                 );
-                //  console.log(response.data.timetable[0]);
-            return response.data;
-            
+            );
+            return {
+                status: response.status,
+                data: response.data,
+                success: true
+            };
+
         } catch (error) {
-            console.log(error);
-            return error;
-            
+            return {
+                status: error.response.status,
+                data: error.response.data,
+                success: false
+            };
+
         }
     },
-           
+    allTimetables: async () => {
+        try {
+            const response = await axiosInstance.get('/gettimetables');
+            if (response.status === 200) {
+                return {
+                    success: true,
+                    data: response.data.timetables,
+                    message: 'timetable fetched',
+                };
+            }
+            else {
+                return {
+                    success: false,
+                    data: null,
+                    message: 'timetable failed',
+                };
+            }
+        } catch (error) {
+            return {
+                status: error.response.status,
+                data: error.response.data,
+                success: false,
+                message: error.message,
+            };
+        }
+    },
+    publishTimeTable: async (timetableId) => {
+        try {
+            const response = await axiosInstance.post('publishtimetable', { id:timetableId });
+            if (response.status === 200) {
+                return {
+                    success: true,
+                    data: response.data,
+                    message: 'timetable published',
+                };
+            }
+            else {
+                return {
+                    success: false,
+                    data: null,
+                    message: 'timetable failed',
+                };
+            }
+        } catch (error) {
+            return {
+                status: error.response.status,
+                data: error.response.data,
+                success: false,
+                message: error.message,
+            };
+        }
+    }
+
 }
 export default timeTable

@@ -1,13 +1,12 @@
+import React, { useContext } from "react";
 import AuthNavigation from "./AuthNavigation";
 import AppNavigation from "./AppNavigation";
-import { useState } from "react";
+import { AuthContext } from "../Context/Auth";
 
 const AuthStack = () => {
-  const [auth, setAuth] = useState(true);
+  const { authenticated } = useContext(AuthContext) || {};
 
-  return (
-    auth ? <AppNavigation /> : <AuthNavigation />
-  );
+  return authenticated ? <AppNavigation /> : <AuthNavigation />;
 };
 
 export default AuthStack;

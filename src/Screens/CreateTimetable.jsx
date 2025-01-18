@@ -1,168 +1,203 @@
-import React, { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Pressable, ScrollView, Text, TextInput, View, Alert } from "react-native";
 import GlobalStyles from "../Styles/GlobalStyles";
 import GlobalColors from "../Styles/GlobalColors";
 import timeTable from "../Api/timeTable";
 import { useNavigation } from "@react-navigation/native";
+import RNPickerSelect from "react-native-picker-select";
+import userAuth from "../Api/userAuth";
 
 const CreateTimetable = () => {
     const navigation = useNavigation();
-    // State to manage the number of teachers
     const [numTeachers, setNumTeachers] = useState(0);
-    // State to manage teacher details, including subjects
     const [teachers, setTeachers] = useState([]);
     const [workingDays, setWorkingDays] = useState(0);
     const [lecturesPerDay, setLecturesPerDay] = useState(0);
     const [maxLecturesPerDayPerTeacher, setMaxLecturesPerDayPerTeacher] = useState(0);
     const [maxLecturesPerWeekPerTeacher, setMaxLecturesPerWeekPerTeacher] = useState(0);
+    const [timetableName, setTimetableName] = useState("");
+    const [teacherList, setTeacherList] = useState([]);
 
-    // Handle the change in number of teachers
-    const handleNumTeachersChange = (text) => {
-        const value = parseInt(text, 10);
-        if (!isNaN(value) && value >= 0) {
-            setNumTeachers(value);
+    useEffect(() => {
+        const fetchTeachers = async () => {
+            try {
+                const response = await userAuth.getAllUsers();
+                if (response.success) {
+                    setTeacherList(response.data);
+                } else {
+                    Alert.alert("Error", "Failed to fetch teachers.");
+                }
+            } catch (error) {
+                console.error("Error fetching teachers:", error);
+                Alert.alert("Error", "An error occurred while fetching teachers.");
+            }
+        };
+        fetchTeachers();
+    }, []);
 
-            // Update the teachers array based on the new number of teachers
-            const updatedTeachers = Array.from({ length: value }, () => ({
-                teacherName: "",
-                numSubjects: 0,
-                subjects: [],
-            }));
-            setTeachers(updatedTeachers);
-        }
-    };
+    useEffect(() => {
+        const updatedTeachers = Array.from({ length: numTeachers }, (_, i) => teachers[i] || {});
+        setTeachers(updatedTeachers);
+    }, [numTeachers]);
 
-    // Handle change in teacher details
     const handleTeacherDetailChange = (index, field, value) => {
         const updatedTeachers = [...teachers];
-        updatedTeachers[index][field] = value;
+
+        if (!updatedTeachers[index]) updatedTeachers[index] = {};
+
+        if (field === "userid") {
+            const selectedTeacher = teacherList.find((t) => t.userid === value);
+            updatedTeachers[index].userid = value;
+            updatedTeachers[index].teacherName = selectedTeacher?.name || "";
+            updatedTeachers[index].subjects = selectedTeacher?.mySubjects || [];
+        }
+
         setTeachers(updatedTeachers);
     };
 
-    // Handle change in the number of subjects for a teacher
-    const handleNumSubjectsChange = (index, value) => {
-        const numSubjects = parseInt(value, 10);
-        if (!isNaN(numSubjects) && numSubjects >= 0) {
-            const updatedTeachers = [...teachers];
-            updatedTeachers[index].numSubjects = numSubjects;
+    const createTimetable = async () => {
+        if (!timetableName || workingDays <= 0 || lecturesPerDay <= 0 || numTeachers <= 0) {
+            Alert.alert("Validation Error", "Please fill all required fields correctly.");
+            return;
+        }
 
-            // Create an array for subjects based on the number entered
-            updatedTeachers[index].subjects = Array.from({ length: numSubjects }, () => "");
-            setTeachers(updatedTeachers);
+        try {
+            const response = await timeTable.createTimetable(
+                workingDays,
+                lecturesPerDay,
+                maxLecturesPerDayPerTeacher,
+                maxLecturesPerWeekPerTeacher,
+                teachers,
+                timetableName,
+                numTeachers,
+            );
+            if (response.success) {
+                navigation.navigate("TimeTable", { data: response.data });
+            } else {
+                Alert.alert("Error", "Failed to create timetable.");
+            }
+        } catch (error) {
+            console.error("Error creating timetable:", error);
+            Alert.alert("Error", "An error occurred while creating the timetable.");
         }
     };
 
-    // Handle change in subject name
-    const handleSubjectNameChange = (teacherIndex, subjectIndex, value) => {
-        const updatedTeachers = [...teachers];
-        updatedTeachers[teacherIndex].subjects[subjectIndex] = value;
-        setTeachers(updatedTeachers);
-    };
-
-    console.log(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher);
-        const CreateTimetable = async()=>{
-            const TimeTable = await timeTable.createTimetable(teachers, workingDays, lecturesPerDay, maxLecturesPerDayPerTeacher, maxLecturesPerWeekPerTeacher,numTeachers);
-            console.log(TimeTable);
-            navigation.navigate('TimeTable',{data:TimeTable});
-        }
-           
     return (
         <View style={GlobalStyles.container}>
             <View>
-                <Text>Create Timetable</Text>
+                <Text style={GlobalStyles.header}>Create Timetable</Text>
             </View>
-            <ScrollView style={{ width: '100%' }}>
+            <ScrollView style={{ width: "100%" }}>
                 <View>
-                    <Text style={GlobalStyles.label}>Working Days</Text>
-                    <TextInput 
-                        onChangeText={(text) => setWorkingDays(parseInt(text, 10) || 0)} 
-                        style={GlobalStyles.inputText} 
-                        keyboardType="numeric" 
-                        placeholder="Enter number of working days" 
+                    <Text style={GlobalStyles.label}>Timetable Name</Text>
+                    <TextInput
+                    placeholderTextColor={GlobalColors.text}
+                        value={timetableName}
+                        onChangeText={setTimetableName}
+                        style={GlobalStyles.inputText}
+                        placeholder="Enter timetable name"
                     />
                 </View>
                 <View>
-                    <Text style={GlobalStyles.label}>Number of Lectures</Text>
-                    <TextInput 
-                        onChangeText={(text) => setLecturesPerDay(parseInt(text, 10) || 0)} 
-                        style={GlobalStyles.inputText} 
-                        keyboardType="numeric" 
-                        placeholder="Enter number of lectures" 
+                    <Text style={GlobalStyles.label}>Working Days</Text>
+                    <TextInput
+                        value={workingDays.toString()}
+                        onChangeText={(text) => setWorkingDays(parseInt(text, 10) || 0)}
+                        style={GlobalStyles.inputText}
+                        keyboardType="numeric"
+                        placeholder="Enter number of working days"
+                    />
+                </View>
+                <View>
+                    <Text style={GlobalStyles.label}>Lectures Per Day</Text>
+                    <TextInput
+                        value={lecturesPerDay.toString()}
+                        onChangeText={(text) => setLecturesPerDay(parseInt(text, 10) || 0)}
+                        style={GlobalStyles.inputText}
+                        keyboardType="numeric"
+                        placeholder="Enter number of lectures per day"
                     />
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Number of Teachers</Text>
                     <TextInput
+                        value={numTeachers.toString()}
+                        onChangeText={(text) => setNumTeachers(parseInt(text, 10) || 0)}
                         style={GlobalStyles.inputText}
                         keyboardType="numeric"
-                        onChangeText={handleNumTeachersChange}
                         placeholder="Enter number of teachers"
                     />
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Teacher Weekly Working Load</Text>
-                    <TextInput 
-                        onChangeText={(text) => setMaxLecturesPerWeekPerTeacher(parseInt(text, 10) || 0)} 
-                        style={GlobalStyles.inputText} 
-                        keyboardType="numeric" 
-                        placeholder="Enter teacher weekly working load"
+                    <TextInput
+                        value={maxLecturesPerWeekPerTeacher.toString()}
+                        onChangeText={(text) => setMaxLecturesPerWeekPerTeacher(parseInt(text, 10) || 0)}
+                        style={GlobalStyles.inputText}
+                        keyboardType="numeric"
+                        placeholder="Enter max weekly lectures per teacher"
                     />
                 </View>
                 <View>
                     <Text style={GlobalStyles.label}>Teacher Daily Working Load</Text>
-                    <TextInput 
-                        onChangeText={(text) => setMaxLecturesPerDayPerTeacher(parseInt(text, 10) || 0)} 
-                        style={GlobalStyles.inputText} 
-                        keyboardType="numeric" 
-                        placeholder="Enter teacher daily working load" 
+                    <TextInput
+                        value={maxLecturesPerDayPerTeacher.toString()}
+                        onChangeText={(text) => setMaxLecturesPerDayPerTeacher(parseInt(text, 10) || 0)}
+                        style={GlobalStyles.inputText}
+                        keyboardType="numeric"
+                        placeholder="Enter max daily lectures per teacher"
                     />
                 </View>
 
-                {teachers.length > 0 && (
-                    <>
-                        <View style={{ alignItems: 'center', backgroundColor: '#71717a', marginVertical: 10, padding: 10, borderRadius: 8 }}>
-                            <Text style={{ fontSize: 22, fontWeight: '700' }}>Teachers Details</Text>
+                {numTeachers > 0 &&
+                    Array.from({ length: numTeachers }).map((_, teacherIndex) => (
+                        <View
+                            key={teacherIndex}
+                            style={{ backgroundColor: "#27272a", borderRadius: 10, padding: 10, marginBottom: 10 }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}>
+                                Teacher {teacherIndex + 1}
+                            </Text>
+                            <Text style={GlobalStyles.label}>Name</Text>
+                            <RNPickerSelect
+                                style={pickerSelectStyles}
+                                placeholder={{ label: "Select Teacher", value: null }}
+                                onValueChange={(value) =>
+                                    handleTeacherDetailChange(teacherIndex, "userid", value)
+                                }
+                                value={teachers[teacherIndex]?.userid || null}
+                                items={teacherList.map((teacher) => ({
+                                    label: teacher.name,
+                                    value: teacher.userid,
+                                }))}
+                            />
+                            <Text style={GlobalStyles.label}>Subjects</Text>
+                            {teachers[teacherIndex]?.subjects?.map((subject, subjectIndex) => (
+                                <TextInput
+                                    key={subjectIndex}
+                                    style={{
+                                        ...GlobalStyles.inputText,
+                                        color: GlobalColors.primary, // Blue color for subjects
+                                    }}
+                                    value={subject}
+                                    editable={false}
+                                />
+                            ))}
                         </View>
-
-                        {teachers.map((teacher, teacherIndex) => (
-                            <View key={teacherIndex} style={{ backgroundColor: '#27272a', borderRadius: 10, padding: 10, marginBottom: 10 }}>
-                                <Text style={{ marginBottom: 10, fontSize: 22, fontWeight: '600' }}>Teacher {teacherIndex + 1}</Text>
-                                <Text style={GlobalStyles.label}>Name</Text>
-                                <TextInput
-                                    style={GlobalStyles.inputText}
-                                    placeholder="Enter Name"
-                                    value={teacher.teacherName}
-                                    onChangeText={(text) => handleTeacherDetailChange(teacherIndex, "teacherName", text)}
-                                />
-                                <Text style={GlobalStyles.label}>Number of Subjects</Text>
-                                <TextInput
-                                    style={GlobalStyles.inputText}
-                                    keyboardType="numeric"
-                                    placeholder="Enter Number of Subjects"
-                                    value={teacher.numSubjects.toString()}
-                                    onChangeText={(text) => handleNumSubjectsChange(teacherIndex, text)}
-                                />
-
-                                {/* Display subject inputs based on the number of subjects entered */}
-                                {teacher.subjects.map((subject, subjectIndex) => (
-                                    <View key={subjectIndex}>
-                                        <Text style={GlobalStyles.label}>Subject Name {subjectIndex + 1}</Text>
-                                        <TextInput
-                                            style={GlobalStyles.inputText}
-                                            placeholder={`Enter Subject Name ${subjectIndex + 1}`}
-                                            value={subject}
-                                            onChangeText={(text) => handleSubjectNameChange(teacherIndex, subjectIndex, text)}
-                                        />
-                                    </View>
-                                ))}
-                            </View>
-                        ))}
-                    </>
-                )}
+                    ))}
 
                 <View>
-                    <Pressable onPress={()=>CreateTimetable()} style={{ backgroundColor: GlobalColors.primary, padding: 10, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 20, fontWeight: '600', color: 'white' }}>Generate Timetable</Text>
+                    <Pressable
+                        onPress={createTimetable}
+                        style={{
+                            backgroundColor: GlobalColors.primary,
+                            padding: 10,
+                            borderRadius: 5,
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <Text style={{ fontSize: 18, fontWeight: "600", color: "white" }}>Generate Timetable</Text>
                     </Pressable>
                 </View>
             </ScrollView>
@@ -171,3 +206,30 @@ const CreateTimetable = () => {
 };
 
 export default CreateTimetable;
+
+const pickerSelectStyles = {
+    inputIOS: {
+        width: "100%",
+        borderRadius: 5,
+        borderColor: GlobalColors.borderColor,
+        borderWidth: 1,
+        height: 50,
+        fontSize: 16,
+        paddingLeft: 10,
+        backgroundColor: "white",
+        color: "#000",
+        marginBottom: 15,
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: GlobalColors.borderColor,
+        borderRadius: 4,
+        color: "#000",
+        backgroundColor: "#fff",
+        paddingRight: 30,
+        marginBottom: 10,
+    },
+};
