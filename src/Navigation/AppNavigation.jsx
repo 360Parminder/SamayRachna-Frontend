@@ -8,12 +8,13 @@ import MyTimetable from "../Screens/MyTimetable";
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
     return (
+        
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
-            <Stack.Screen name="CreateTimetable" component={CreateTimetable}/>
-            <Stack.Screen name="TimeTable" component={TimetableScreen} />
-            <Stack.Screen name="AllTimetables" component={AllTimetables} />
-            <Stack.Screen name="MyTimetable" component={MyTimetable} />  
+            <Stack.Screen name="CreateTimetable" component={CreateTimetable} options={{ headerShown: false }}/>
+            <Stack.Screen name="TimeTable" component={TimetableScreen}  options={{ headerShown: false }}/>
+            <Stack.Screen name="AllTimetables" component={AllTimetables}  options={{ headerShown: false }}/>
+            <Stack.Screen name="MyTimetable" component={MyTimetable}  options={{ headerShown: false }}/>  
         </Stack.Navigator>
     );
 };  

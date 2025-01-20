@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import GlobalStyles from '../Styles/GlobalStyles';
+import GlobalColors from '../Styles/GlobalColors';
 
 const LectureCard = ({ lecture }) => (
   <View style={styles.lectureCard}>
@@ -12,8 +14,6 @@ const LectureCard = ({ lecture }) => (
 
 const TimetableScreen = ({ route }) => {
   const data = route.params?.data.timetable;
-  console.log("table from table",data);
-  
 
   if (!data || !data.timetable || !Array.isArray(data.timetable)) {
     return <Text style={styles.errorText}>No timetable data available.</Text>;
@@ -22,8 +22,9 @@ const TimetableScreen = ({ route }) => {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Timetable</Text>
+    <ScrollView>
+    <View style={GlobalStyles.container}>
+      <Text style={GlobalStyles.header}>Timetable</Text>
       {data.timetable.map((daySchedule, dayIndex) => (
         <View key={dayIndex} style={styles.dayContainer}>
           <Text style={styles.dayTitle}>{daysOfWeek[dayIndex]}</Text>
@@ -32,34 +33,23 @@ const TimetableScreen = ({ route }) => {
           ))}
         </View>
       ))}
+    </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f0ff',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#6600ff',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
   dayContainer: {
     marginBottom: 24,
   },
   dayTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2a0077',
+    color: GlobalColors.text,
     marginBottom: 8,
   },
   lectureCard: {
-    backgroundColor: '#9c73ff',
+    backgroundColor: GlobalColors.primary,
     padding: 16,
     borderRadius: 10,
     marginBottom: 8,
@@ -67,11 +57,11 @@ const styles = StyleSheet.create({
   lectureText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#ffffff',
+    color: GlobalColors.text,
   },
   teacherText: {
     fontSize: 14,
-    color: '#f3f0ff',
+    color: GlobalColors.text
   },
   errorText: {
     fontSize: 18,

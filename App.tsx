@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthStack from './src/Navigation/AuthStack';
 import { AuthProvider } from './src/Context/Auth';
 import { UserDataProvider } from './src/Context/UserData';
+import GlobalColors from './src/Styles/GlobalColors';
 
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <NavigationContainer>
             <AuthProvider>
                 <UserDataProvider>
+                    <StatusBar barStyle="light-content" backgroundColor={GlobalColors.background}  />
                     <AuthStack />
                 </UserDataProvider>
             </AuthProvider>

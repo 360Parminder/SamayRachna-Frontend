@@ -9,7 +9,9 @@ const GlobalColors = {
     border: "#7b7f95",
     borderSecondary: "#1a3e1f",
     buttonPrimary:"#1e2338",
-    buttonSecondary:"#2e344e",
+    primaryButtonText:"#7498e5",
+    buttonSecondary:"#3a1e1e",
+    buttonSecondaryText:"#cd494c",
 };
 
 export default GlobalColors;
