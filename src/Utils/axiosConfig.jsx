@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         } else {
-          console.warn('No token found. User might need to log in.');
+          console.log('No token found. User might need to log in.');
           // Optionally redirect to login or handle unauthenticated state here
         }
       } catch (error) {

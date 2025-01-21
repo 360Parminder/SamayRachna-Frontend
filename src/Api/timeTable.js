@@ -14,6 +14,7 @@ const timeTable = {
                     maxLecturesPerWeekPerTeacher: maxLecturesPerWeekPerTeacher,
                     teachers: teachers,
                     timetableName: timetableName,
+                    timetableId:"1d7cd157-e4d5-4bab-8212-39ba9634df15"
 
                 }
             );

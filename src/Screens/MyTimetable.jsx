@@ -16,8 +16,8 @@ const MyTimetable = () => {
     };
 
     return (
-        <View style={GlobalStyles.container}>
-        <ScrollView contentContainerStyle={{paddingBottom: 20}}>
+        <View style={[GlobalStyles.container,{}]}>
+        <ScrollView style={{width:'100%'}} contentContainerStyle={{paddingBottom: 20}}>
             {userData.mytimetable.map((day, index) => (
                 <View key={index} style={styles.dayContainer}>
                     <Text style={styles.dayTitle}>Day {index+1}</Text>

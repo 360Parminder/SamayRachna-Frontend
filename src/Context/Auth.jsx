@@ -34,12 +34,15 @@ export const AuthProvider = ({ children }) => {
         }
         else {
             setLoading(false);
+            setAuthenticated(false);
         }
 
     };
 
-    const logout = () => {
+    const logout  = async () => {
+       await EncryptedStorage.removeItem('token');
         setUser(null);
+        setAuthenticated(false);
     };
 
     return (

@@ -9,7 +9,7 @@ const GlobalStyles = StyleSheet.create({
         backgroundColor: GlobalColors.background,
         paddingHorizontal: 20,
         // justifyContent: 'center',
-        // alignItems:'center'
+        alignItems:'center'
     },
     label: {
         color: GlobalColors.textSecondary,

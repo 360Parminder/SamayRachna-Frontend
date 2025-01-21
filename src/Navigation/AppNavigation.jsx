@@ -4,6 +4,7 @@ import CreateTimetable from "../Screens/CreateTimetable";
 import TimetableScreen from "../Screens/TimeTable";
 import AllTimetables from "../Screens/AllTimetables";
 import MyTimetable from "../Screens/MyTimetable";
+import Profile from "../Screens/Profile";
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = () => {
@@ -15,6 +16,7 @@ const AppNavigation = () => {
             <Stack.Screen name="TimeTable" component={TimetableScreen}  options={{ headerShown: false }}/>
             <Stack.Screen name="AllTimetables" component={AllTimetables}  options={{ headerShown: false }}/>
             <Stack.Screen name="MyTimetable" component={MyTimetable}  options={{ headerShown: false }}/>  
+            <Stack.Screen name="Profile" component={Profile}  options={{ headerShown: false }}/>
         </Stack.Navigator>
     );
 };  

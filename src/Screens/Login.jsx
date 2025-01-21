@@ -4,6 +4,7 @@ import GlobalColors from "../Styles/GlobalColors";
 import userAuth from "../Api/userAuth";
 import { useContext, useState } from "react";
 import { AuthContext } from "../Context/Auth";
+import InputGroup from "../Components/InputGroup";
 
 const Login = () => {
     const { authenticated, loading, login } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const Login = () => {
         return re.test(email);
     };
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         if (!validateEmail(email)) {
             Alert.alert("Invalid Email", "Please enter a valid email address.");
             return;
@@ -39,7 +40,7 @@ const Login = () => {
                 <Image source={require("../Assets/analytics.png")} style={{ width: 200, height: 200 }} />
                 <View style={{ width: '100%' }}>
                     <Text style={{ textAlign: 'center', fontSize: 28, fontWeight: '600' }}>Login</Text>
-                    <View style={{ marginTop: 20 }}>
+                    {/* <View style={{ marginTop: 20 }}>
                         <Text style={GlobalStyles.label}>Email</Text>
                         <TextInput
                             onChangeText={setEmail}
@@ -48,8 +49,14 @@ const Login = () => {
                             keyboardType="email-address"
                             autoCapitalize="none"
                         />
-                    </View>
-                    <View style={{ marginTop: 20 }}>
+                    </View> */}
+                    <InputGroup
+                        label="Email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+
+                    {/* <View style={{ marginTop: 20 }}>
                         <Text style={GlobalStyles.label}>Password</Text>
                         <TextInput
                             onChangeText={setPassword}
@@ -57,17 +64,16 @@ const Login = () => {
                             placeholder="Enter your password"
                             secureTextEntry
                         />
-                    </View>
+                    </View> */}
+                    <InputGroup
+                        label="Password"
+                        placeholder="Enter your password"
+                        secureTextEntry
+                        onChangeText={setPassword}
+                    />
                     <Pressable
                         onPress={handleLogin}
-                        style={{
-                            marginTop: 20,
-                            backgroundColor: GlobalColors.primary,
-                            padding: 10,
-                            borderRadius: 5,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
+                        style={[GlobalStyles.primaryButton, { width: '100%' }]}
                         disabled={loading}
                     >
                         <Text style={{ color: GlobalColors.text, fontSize: 20, fontWeight: '600' }}>

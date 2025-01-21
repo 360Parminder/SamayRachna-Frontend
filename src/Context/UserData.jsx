@@ -7,7 +7,7 @@ export const UserDataContext = createContext();
 
 // Create a provider component
 export const UserDataProvider = ({ children }) => {
-    const {token} = useContext(AuthContext);
+    const {token,authenticated} = useContext(AuthContext);
     const [userData, setUserData] = useState(null);
     const profile = async() =>{
             const response = await userAuth.profile(token);
@@ -19,7 +19,7 @@ export const UserDataProvider = ({ children }) => {
     useEffect(() => {
         profile();
 
-    }, [token]);
+    }, [token,authenticated]);
         
 
     return (

@@ -22,8 +22,8 @@ const TimetableScreen = ({ route }) => {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   return (
-    <ScrollView>
-    <View style={GlobalStyles.container}>
+    <ScrollView style={{width:"100%"}}>
+    <View style={[GlobalStyles.container,{width:"100%"}]}>
       <Text style={GlobalStyles.header}>Timetable</Text>
       {data.timetable.map((daySchedule, dayIndex) => (
         <View key={dayIndex} style={styles.dayContainer}>
