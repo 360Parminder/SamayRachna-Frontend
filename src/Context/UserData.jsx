@@ -15,7 +15,7 @@ export const UserDataProvider = ({ children }) => {
             setUserData(response.data);
             }
     }
-
+    
     useEffect(() => {
         profile();
 

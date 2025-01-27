@@ -14,7 +14,7 @@ const timeTable = {
                     maxLecturesPerWeekPerTeacher: maxLecturesPerWeekPerTeacher,
                     teachers: teachers,
                     timetableName: timetableName,
-                    timetableId:"1d7cd157-e4d5-4bab-8212-39ba9634df15"
+                    timetableId: null
 
                 }
             );
@@ -61,7 +61,7 @@ const timeTable = {
     },
     publishTimeTable: async (timetableId) => {
         try {
-            const response = await axiosInstance.post('publishtimetable', { id:timetableId });
+            const response = await axiosInstance.post('publishtimetable', { id: timetableId });
             if (response.status === 200) {
                 return {
                     success: true,
@@ -84,7 +84,41 @@ const timeTable = {
                 message: error.message,
             };
         }
-    }
+    },
+    downloadTimeTable: async (timetableId) => {
+        // console.log("timetableId", timetableId);
+        
+        try {
+            const response = await axiosInstance.get('downloadtimetable', {
+                params: {
+                    id: timetableId
+                }
+            });
+            console.log(response.data);
+            
+            if (response.status === 200) {
+                return {
+                    success: true,
+                    data: response.data.downloadUrl,
+                    message: 'timetable downloaded',
+                };
+            }
+            else {
+                return {
+                    success: false,
+                    data: null,
+                    message: 'timetable failed',
+                };
+            }
+        } catch (error) {
+            return {
+                status: error.response.status,
+                data: error.response.data,
+                success: false,
+                message: error.message,
+            };
+        }
+    },
 
 }
 export default timeTable

@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { Alert } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://192.168.31.158:9876', // Replace with your API base URL
+  baseURL: 'http://192.168.31.196:9876', // Replace with your API base URL
   // timeout: 10000, // Optional timeout
 });
 
@@ -45,10 +46,10 @@ axiosInstance.interceptors.response.use(
 
       switch (status) {
         case 400:
-          console.error('Bad Request:', data.message || 'Invalid request');
+          // Alert.alert('Bad Request:', data.message || 'Invalid request');
           break;
         case 401:
-          console.error('Unauthorized:', data.message || 'Authentication failed');
+          // Alert.alert('Unauthorized', data.message || 'Authentication failed');
           try {
             await EncryptedStorage.removeItem('token'); // Clear token
             console.log('Token cleared. Redirecting to login...');

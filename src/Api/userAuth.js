@@ -33,8 +33,11 @@ const userAuth = {
             const response = await axios.post('http://localhost:9876/register', { email, password });
             return response.data;
         } catch (error) {
-            console.log(error);
-            return error;
+            return {
+                success: false,
+                data: null,
+                message: error.message,
+            }
         }
     },
 
@@ -43,8 +46,12 @@ const userAuth = {
             const response = await axios.post('http://localhost:9876/logout');
             return response.data;
         } catch (error) {
-            console.log(error);
-            return error;
+           return{
+                success: false,
+                data: null,
+                message: error.message,
+        
+           };
         }
     },
     profile: async () => {
@@ -58,8 +65,11 @@ const userAuth = {
                 message: 'Profile retrieved',
             };
         } catch (error) {
-            console.log(error);
-            return error;
+            return {
+                success: false,
+                data: null,
+                message: error.message,
+            };
         }
     },
     getAllUsers: async () => {
@@ -73,8 +83,28 @@ const userAuth = {
                 message: 'Users retrieved',
             };
         } catch (error) {
-            console.log(error);
-            return error;
+           return{
+                success: false,
+                data: null,
+                message: error.message,
+            };
+           
+        }
+    },
+    changePassword: async (oldPassword, newPassword) => {
+        try {
+            const response = await axiosInstance.post('/changepassword', { oldPassword, newPassword });
+            return {
+                success: true,
+                data: response.data,
+                message: 'Password changed',
+            }
+        } catch (error) {
+            return {
+                success: false,
+                data: null,
+                message: error.message,
+            };
         }
     },
 };

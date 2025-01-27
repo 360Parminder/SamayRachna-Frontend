@@ -1,19 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import GlobalStyles from '../Styles/GlobalStyles';
 import GlobalColors from '../Styles/GlobalColors';
 import { UserDataContext } from '../Context/UserData';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from '../Context/Auth';
+import ProfileModal from '../Components/ProfileModal';
+import PasswordModal from '../Components/PasswordModal';
 
 const Profile = () => {
     const { userData } = useContext(UserDataContext);
     const {logout} = useContext(AuthContext);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [passwordmodal,setPasswordmodal]=useState(false);
     return (
         <View style={GlobalStyles.container}>
             <View style={styles.profileHeader}>
                 <Image
-                    source={{ uri: userData.profilepic }}
+                   source={
+                    userData?.profilePic
+                      ? { uri: userData.profilePic }
+                      : require('../Assets/profile.jpeg') }
                     style={styles.profileImage}
                 />
                 <View style={{ marginLeft: 20 }}>
@@ -22,14 +29,14 @@ const Profile = () => {
                 </View>
             </View>
             <View style={styles.profileOptions}>
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity onPress={()=>setModalVisible(true)} style={styles.option}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                         <Ionicons style={{ backgroundColor: GlobalColors.buttonPrimary, padding: 10, borderRadius: 100 }} name="person-outline" size={30} color={GlobalColors.primaryButtonText} />
                         <Text style={styles.optionText}>Profile</Text>
                     </View>
                     <Ionicons name="chevron-forward-outline" size={30} color={GlobalColors.text} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.option}>
+                <TouchableOpacity onPress={()=>setPasswordmodal(true)} style={styles.option}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                         <Ionicons style={{ backgroundColor: GlobalColors.buttonPrimary, padding: 10, borderRadius: 100 }} name="lock-closed-outline" size={30} color={GlobalColors.primaryButtonText} />
                         <Text style={styles.optionText}>Change Password</Text>
@@ -58,6 +65,8 @@ const Profile = () => {
                     <Ionicons name="chevron-forward-outline" size={30} color={GlobalColors.text} />
                 </TouchableOpacity>
             </View>
+            <ProfileModal visible={modalVisible} onClose={() => setModalVisible(false)} userDetails={userData} />
+            <PasswordModal visible={passwordmodal} onClose={() => setPasswordmodal(false)} />
         </View>
     );
 };
@@ -80,7 +89,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginTop: 10,
-        color: GlobalColors.text
+        color: GlobalColors.text,
+        textTransform: 'capitalize',
+
     },
     profilePost: {
         fontSize: 16,

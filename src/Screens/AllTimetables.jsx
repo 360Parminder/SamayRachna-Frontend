@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, Modal, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable } from 'react-native';
+import { View, Text, FlatList, Modal, TouchableOpacity, StyleSheet, Alert, ScrollView, Pressable } from 'react-native';
 import timeTable from '../Api/timeTable';
 import GlobalStyles from '../Styles/GlobalStyles';
 import GlobalColors from '../Styles/GlobalColors';
+import NotFound from '../Components/NotFound';
+import { FileDownloader } from '../Components/FileDownloader';
+
 
 const AllTimetables = () => {
     const [timetables, setTimetables] = useState([]);
     const [selectedTimetable, setSelectedTimetable] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-
     useEffect(() => {
         (async () => {
             try {
@@ -25,8 +27,9 @@ const AllTimetables = () => {
         })();
     }, []);
 
+
     const publish = async (timetableId) => {
-            setLoading(true);
+        setLoading(true);
         try {
             const response = await timeTable.publishTimeTable(timetableId);
             if (response.success) {
@@ -40,14 +43,28 @@ const AllTimetables = () => {
                 Alert.alert("Success", "Timetable published successfully.");
 
             } else {
-                    setLoading(false);
+                setLoading(false);
                 Alert.alert("Error", "Failed to publish timetable.");
             }
         } catch (error) {
-                setLoading(false);
+            setLoading(false);
             Alert.alert("Error", "An error occurred while publishing timetable.");
         }
     }
+    const handleDownload = async (timetableId, filename) => {
+        const response = await timeTable.downloadTimeTable(timetableId);
+        if (response.success) {
+            try {
+                const message  = await FileDownloader(response.data, filename);
+              Alert.alert("Success", message.message);
+
+            } catch (error) {
+                Alert.alert("Error", "Failed to start the download.");
+            }
+        } else {
+            Alert.alert("Error", "Failed to download timetable.");
+        }
+    };
 
     const renderTimetable = ({ item }) => (
         <TouchableOpacity
@@ -95,11 +112,17 @@ const AllTimetables = () => {
 
     return (
         <View style={GlobalStyles.container}>
-            <FlatList
-                data={timetables}
-                renderItem={renderTimetable}
-                keyExtractor={item => item.id}
-            />
+            {timetables.length > 0 ? (
+                <FlatList
+                    data={timetables}
+                    renderItem={renderTimetable}
+                    keyExtractor={item => item.id}
+                />
+            ) : (
+                <NotFound message="No Timetables Found" />
+            )
+
+            }
             {selectedTimetable && (
                 <Modal
                     animationType="slide"
@@ -116,9 +139,9 @@ const AllTimetables = () => {
                         ))}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Pressable style={[GlobalStyles.primaryButton, { width: '40%' }]} onPress={() => publish(selectedTimetable.id)} >
-                                <Text style={GlobalStyles.primaryButtonText}>{loading?"Publishing...":"Publish"}</Text>
+                                <Text style={GlobalStyles.primaryButtonText}>{loading ? "Publishing..." : "Publish"}</Text>
                             </Pressable>
-                            <Pressable style={[GlobalStyles.primaryButton, { width: '40%' }]} onPress={() => { Alert.alert("", "Comming Soon.....") }} >
+                            <Pressable style={[GlobalStyles.primaryButton, { width: '40%' }]} onPress={() => { handleDownload(selectedTimetable.id, selectedTimetable.name) }} >
                                 <Text style={GlobalStyles.primaryButtonText}>Download</Text>
                             </Pressable>
                         </View>
