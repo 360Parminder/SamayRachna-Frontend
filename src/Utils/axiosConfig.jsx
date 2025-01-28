@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Alert } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 // Create an Axios instance

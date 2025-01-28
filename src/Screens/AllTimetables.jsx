@@ -6,12 +6,12 @@ import GlobalColors from '../Styles/GlobalColors';
 import NotFound from '../Components/NotFound';
 import { FileDownloader } from '../Components/FileDownloader';
 
-
 const AllTimetables = () => {
     const [timetables, setTimetables] = useState([]);
     const [selectedTimetable, setSelectedTimetable] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         (async () => {
             try {
@@ -27,6 +27,7 @@ const AllTimetables = () => {
         })();
     }, []);
 
+    console.log("timetables", timetables);
 
     const publish = async (timetableId) => {
         setLoading(true);
@@ -41,7 +42,6 @@ const AllTimetables = () => {
                 }
                 setLoading(false);
                 Alert.alert("Success", "Timetable published successfully.");
-
             } else {
                 setLoading(false);
                 Alert.alert("Error", "Failed to publish timetable.");
@@ -50,14 +50,14 @@ const AllTimetables = () => {
             setLoading(false);
             Alert.alert("Error", "An error occurred while publishing timetable.");
         }
-    }
+    };
+
     const handleDownload = async (timetableId, filename) => {
         const response = await timeTable.downloadTimeTable(timetableId);
         if (response.success) {
             try {
-                const message  = await FileDownloader(response.data, filename);
-              Alert.alert("Success", message.message);
-
+                const message = await FileDownloader(response.data, filename);
+                Alert.alert("Success", message.message);
             } catch (error) {
                 Alert.alert("Error", "Failed to start the download.");
             }
@@ -78,10 +78,10 @@ const AllTimetables = () => {
                 {/* Status Indicator */}
                 <View
                     style={{
-                        backgroundColor: item.status == true ? '#095e1c' : '#82190c',
+                        backgroundColor: item.status ? '#095e1c' : '#82190c',
                         width: 10,
                         height: 10,
-                        borderRadius: 5, // Rounded edges
+                        borderRadius: 5,
                     }}
                 />
                 {/* Timetable Name */}
@@ -96,7 +96,6 @@ const AllTimetables = () => {
                 </Text>
             </View>
         </TouchableOpacity>
-
     );
 
     const renderLecture = (lecture, index) => (
@@ -110,19 +109,32 @@ const AllTimetables = () => {
         </View>
     );
 
+    const groupLecturesByDay = (timetable) => {
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const groupedTimetable = Array.from({ length: 5 }, () => []);
+
+        timetable.forEach((lecture) => {
+            const dayIndex = lecture.day - 1; // Convert day (1-5) to array index (0-4)
+            if (dayIndex >= 0 && dayIndex < 5) {
+                groupedTimetable[dayIndex].push(lecture);
+            }
+        });
+
+        return groupedTimetable;
+    };
+
     return (
         <View style={GlobalStyles.container}>
             {timetables.length > 0 ? (
                 <FlatList
                     data={timetables}
                     renderItem={renderTimetable}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item) => item.id}
                 />
             ) : (
                 <NotFound message="No Timetables Found" />
-            )
+            )}
 
-            }
             {selectedTimetable && (
                 <Modal
                     animationType="slide"
@@ -132,20 +144,30 @@ const AllTimetables = () => {
                 >
                     <ScrollView style={styles.modalView} contentContainerStyle={{ paddingBottom: 60 }}>
                         <Text style={styles.modalTitle}>{selectedTimetable.name}</Text>
-                        {selectedTimetable.timetable.map((day, index) => (
-                            <View key={index}>
-                                {day.map(renderLecture)}
+                        {groupLecturesByDay(selectedTimetable.timetable).map((daySchedule, dayIndex) => (
+                            <View key={dayIndex}>
+                                <Text style={styles.dayTitle}>{['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'][dayIndex]}</Text>
+                                {daySchedule.map((lecture, lectureIndex) => renderLecture(lecture, lectureIndex))}
                             </View>
                         ))}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Pressable style={[GlobalStyles.primaryButton, { width: '40%' }]} onPress={() => publish(selectedTimetable.id)} >
+                            <Pressable
+                                style={[GlobalStyles.primaryButton, { width: '40%' }]}
+                                onPress={() => publish(selectedTimetable.id)}
+                            >
                                 <Text style={GlobalStyles.primaryButtonText}>{loading ? "Publishing..." : "Publish"}</Text>
                             </Pressable>
-                            <Pressable style={[GlobalStyles.primaryButton, { width: '40%' }]} onPress={() => { handleDownload(selectedTimetable.id, selectedTimetable.name) }} >
+                            <Pressable
+                                style={[GlobalStyles.primaryButton, { width: '40%' }]}
+                                onPress={() => handleDownload(selectedTimetable.id, selectedTimetable.name)}
+                            >
                                 <Text style={GlobalStyles.primaryButtonText}>Download</Text>
                             </Pressable>
                         </View>
-                        <Pressable style={[GlobalStyles.secondaryButton, { width: '100%' }]} onPress={() => { setModalVisible(false) }} >
+                        <Pressable
+                            style={[GlobalStyles.secondaryButton, { width: '100%' }]}
+                            onPress={() => setModalVisible(false)}
+                        >
                             <Text style={GlobalStyles.secondaryButtonText}>Close</Text>
                         </Pressable>
                     </ScrollView>
@@ -171,7 +193,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: GlobalColors.text,
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
     },
     timetableDate: {
         fontSize: 14,
@@ -192,7 +214,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: GlobalColors.text
+        color: GlobalColors.text,
+    },
+    dayTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: GlobalColors.text,
+        marginBottom: 8,
     },
     lectureItem: {
         backgroundColor: GlobalColors.secondary,
@@ -204,7 +232,7 @@ const styles = StyleSheet.create({
     lectureText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: GlobalColors.text
+        color: GlobalColors.text,
     },
 });
 
